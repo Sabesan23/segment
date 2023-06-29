@@ -1,23 +1,39 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import { SchemaModal } from './component/SchemaModal';
 
 function App() {
+  const [showModal, setShowModal] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleModalOpen = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [success]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='backgroundPattern'>
+      {success && <div class="alert alert-success" role="alert">
+        Successfully added !
+      </div>}
+      <SchemaModal showModal={showModal} handleModalClose={handleModalClose} setSuccess={setSuccess} />
+      <button className="btn btn-primary m-5" onClick={handleModalOpen} >
+        Add Segment
+      </button>
     </div>
   );
 }
